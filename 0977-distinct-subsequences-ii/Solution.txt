@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int MOD = 1e9 + 7;
+    int distinctSubseqII(string s) {
+        long long total = 0;
+        vector<long long> end(26, 0);
+        long long newEnd;
+        for (auto ch : s) {
+            newEnd = (total + 1) % MOD;
+            total = (total - end[ch - 'a'] + newEnd + MOD) % MOD;
+            end[ch - 'a'] = newEnd;
+        }
+        return total;
+    }
+};
