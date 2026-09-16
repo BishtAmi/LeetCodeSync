@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int MOD = 1e9 + 7;
+    int dp[1001][1001][2];
+    int solve(int i, int k, bool isStart, int n) {
+        if (k == 0)
+            return 1;
+        if (i == n)
+            return 0;
+        if (dp[i][k][isStart] != -1)
+            return dp[i][k][isStart];
+        int ans = solve(i + 1, k, isStart, n);
+        if (isStart)
+            ans = (ans + solve(i + 1, k, 0, n)) % MOD;
+        else
+            ans = (ans + solve(i, k - 1, 1, n)) % MOD;
+        return dp[i][k][isStart] = ans;
+    }
+    int numberOfSets(int n, int k) {
+        memset(dp, -1, sizeof(dp));
+        return solve(0, k, 1, n);
+    }
+};
+
+/*
+  0 1 2 3
+
+
+  0 1 2
+
+
+
+
+*/
