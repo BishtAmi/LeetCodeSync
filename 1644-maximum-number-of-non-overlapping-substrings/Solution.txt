@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int findRight(int l, string s, vector<int>& lastOcc,vector<int>& firstOcc) {
+        int r = lastOcc[s[l] - 'a'];
+        for (int i = l; i <= r; i++) {
+            if (firstOcc[s[i] - 'a'] < l)
+                return -1;
+            r = max(r, lastOcc[s[i] - 'a']);
+        }
+        return r;
+    }
+    vector<string> maxNumOfSubstrings(string s) {
+        int n = s.length();
+
+        vector<int> firstOcc(26, -1);
+        vector<int> lastOcc(26, -1);
+
+        int mx = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (firstOcc[s[i] - 'a'] == -1) {
+                firstOcc[s[i] - 'a'] = i;
+            }
+
+            lastOcc[s[i] - 'a'] = i;
+        }
+
+        vector<string> res;
+        int r = -1;
+        for (int i = 0; i < n; i++) {
+            if (firstOcc[s[i] - 'a'] == i) {
+                int nr = findRight(i, s, lastOcc,firstOcc);
+                if(nr == -1) continue;
+                if (i > r)
+                    res.push_back("");
+                r = nr;
+                res.back() = s.substr(i, nr - i + 1);
+            }
+        }
+
+        return res;
+    }
+};
