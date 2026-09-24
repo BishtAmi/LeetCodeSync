@@ -1,0 +1,35 @@
+class Solution {
+public:
+    vector<int> seen, res;
+
+    void solve(int i, vector<int> &arr) {
+        if (i >= 15)
+            return;
+        if (seen[i]) {
+            solve(i + 1, arr);
+            return;
+        }
+        vector<int> l, r;
+        for (auto x : arr) {
+            if ((1 << (14 - i)) & x) {
+                l.push_back(x);
+            } else
+                r.push_back(x);
+        }
+
+        if (l.size()) {
+            res[i] += l.size();
+            solve(i + 1, l);
+        }
+        if (r.size()) {
+            seen[i] = 1;
+            solve(i + 1, r);
+        }
+    }
+    vector<int> largestPower(vector<int>& nums) {
+        seen.assign(15, 0);
+        res.assign(15, 0);
+        solve(0, nums);
+        return res;
+    }
+};
