@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int longestSubarray(vector<int>& nums, int k) {
+        int n = nums.size();
+        int ans = 0;
+
+        for (int i = 0; i < n; i++) {
+            unordered_map<int, int> freq;
+            long long sum = 0;
+            freq[0] = 1;
+            for (int j = i; j < n; j++) {
+                sum += nums[j];
+                long long rem = ((sum % k) + k) % k;
+                long long x = (2LL * nums[j]) % k;
+                x = (x + k) % k;
+
+                freq[x]++;
+
+                if (freq[rem]) {
+                    ans = max(ans, j - i + 1);
+                }
+            }
+        }
+
+        return ans;
+    }
+};
