@@ -1,0 +1,21 @@
+class Solution {
+public:
+    void valid_parenthes(int open, int close, string s, vector<string>& res) {
+        if (open == 0 && close == 0) {
+            res.push_back(s);
+            return;
+        } else if (open == close) {
+            valid_parenthes(open - 1, close, s + '(', res);
+        } else if (open == 0) {
+            valid_parenthes(open, close - 1, s + ')', res);
+        } else {
+            valid_parenthes(open - 1, close, s + '(', res);
+            valid_parenthes(open, close - 1, s + ')', res);
+        }
+    }
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+        valid_parenthes(n, n, "", res);
+        return res;
+    }
+};
