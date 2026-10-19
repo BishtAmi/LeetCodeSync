@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int color(char ch) {
+        if (ch == 'R')
+            return 0;
+        if (ch == 'B')
+            return 1;
+        return 2;
+    }
+    int findColoredRoot(vector<vector<int>>& edges, string colors) {
+        int n = colors.size();
+        vector<int> in(n, 0), out(n, 0);
+        for (auto ed : edges) {
+            int u = ed[0], v = ed[1];
+            int cl0 = color(colors[u]), cl1 = color(colors[v]);
+            if (cl0 == cl1)
+                return -1;
+            if ((cl0 + 1) % 3 == cl1) {
+                in[v]++;
+                out[u]++;
+            } else {
+                in[u]++;
+                out[v]++;
+            }
+        }
+        int root = -1;
+
+        for (int i = 0; i < n; i++) {
+            cout<<in[i]<<" "<<out[i]<<"\n";
+            if (out[i] > 2)
+                return -1;
+            if (in[i] == 0) {
+                if (root != -1)
+                    return -1;
+                root = i;
+            } else if (in[i] != 1)
+                return -1;
+        }
+        return root;
+    }
+};
+/*
+      depth[0,3,1,2,4]
+      color[B R W R B]
+
+
+*/
