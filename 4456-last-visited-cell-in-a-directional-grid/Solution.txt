@@ -1,0 +1,45 @@
+class Solution {
+public:
+    bool notValid(int r, int c, int n, int m) {
+        return r < 0 || c < 0 || r >= n || c >= m;
+    }
+    int check(char ch) {
+        if (ch == 'L')
+            return 3;
+        if (ch == 'R')
+            return 2;
+        if (ch == 'D')
+            return 0;
+        return 1;
+    }
+    // L -> y - 1
+    // R -> y + 1
+    // U -> x - 1
+    // D -> x + 1
+    vector<int> lastVisitedCell(vector<vector<char>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        vector<vector<int>> vis(n, vector<int>(m, 0));
+        queue<pair<int, int>> q;
+        q.push({0, 0});
+        vis[0][0] = 1;
+        int dr[4] = {1, -1, 0, 0};
+        int dc[4] = {0, 0, 1, -1};
+        while (!q.empty()) {
+            auto [x, y] = q.front();
+            q.pop();
+            int indx = check(grid[x][y]);
+            int r = x + dr[indx];
+            int c = y + dc[indx];
+            if (notValid(r, c, n, m)) {
+                return {x, y};
+            }
+            if (vis[r][c]) {
+                return {x, y};
+            }
+            vis[r][c] = 1;
+            q.push({r, c});
+        }
+        return {0, 0};
+    }
+};
