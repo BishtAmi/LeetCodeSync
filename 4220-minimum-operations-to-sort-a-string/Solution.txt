@@ -1,35 +1,23 @@
 class Solution {
 public:
-    int calOps(string temp) {
-        int n = temp.length();
-        sort(temp.begin() + 1, temp.end());
-        if (is_sorted(temp.begin(), temp.end()))
-            return 1;
-        sort(temp.begin(), temp.begin() + n - 1);
-        if (is_sorted(temp.begin(), temp.end()))
-            return 2;
-        sort(temp.begin() + 1, temp.end());
-        if (is_sorted(temp.begin(), temp.end()))
-            return 3;
-        return 1e9;
-    }
-    int calOps1(string temp) {
-        int n = temp.length();
-        sort(temp.begin(), temp.begin() + n - 1);
-        if (is_sorted(temp.begin(), temp.end()))
-            return 1;
-        sort(temp.begin() + 1, temp.end());
-        if (is_sorted(temp.begin(), temp.end()))
-            return 2;
-        sort(temp.begin(), temp.begin() + n - 1);
-        if (is_sorted(temp.begin(), temp.end()))
-            return 3;
-        return 1e9;
-    }
     int minOperations(string s) {
         if (is_sorted(s.begin(), s.end()))
             return 0;
-        int ans = min(calOps(s), calOps1(s));
-        return ans == 1e9 ? -1 : ans;
+        int n = s.length();
+        if (n == 2)
+            return -1;
+        char mini = s[0], maxi = s[0];
+        for (auto ch : s) {
+            mini = min(mini, ch);
+            maxi = max(maxi, ch);
+        }
+        if (maxi == s[n - 1] || mini == s[0])
+            return 1;
+        for (int i = 1; i < n - 1; i++) {
+            if (maxi == s[i] || mini == s[i]) {
+                return 2;
+            }
+        }
+        return 3;
     }
 };
