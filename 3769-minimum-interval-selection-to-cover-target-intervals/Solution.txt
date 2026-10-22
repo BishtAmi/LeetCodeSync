@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int minSelection(vector<vector<int>>& availableIntervals,
+                     vector<vector<int>>& targetIntervals) {
+        auto cmp = [](const vector<int>& a, const vector<int>& b) {
+            return a[0] != b[0] ? a[0] < b[0] : a[1] < b[1];
+        };
+        sort(availableIntervals.begin(), availableIntervals.end(), cmp);
+        sort(targetIntervals.begin(), targetIntervals.end(), cmp);
+
+        // merge targets (closed intervals: touching ones merge)
+        vector<vector<int>> merged;
+        for (auto& t : targetIntervals) {
+            if (!merged.empty() && t[0] <= merged.back()[1])
+                merged.back()[1] = max(merged.back()[1], t[1]);
+            else
+                merged.push_back(t);
+        }
+
+        int n = availableIntervals.size(), i = 0, cnt = 0;
+        long long reach = LLONG_MIN / 2, best = LLONG_MIN / 2;
+
+        for (auto& t : merged) {
+            int s = t[0], e = t[1];
+            if (reach >= e) continue;
+
+            if (reach < s) {                       // point s is not covered yet
+                while (i < n && availableIntervals[i][0] <= s)
+                    best = max(best, (long long)availableIntervals[i++][1]);
+                if (best < s) return -1;
+                cnt++;
+                reach = best;
+            }
+            while (reach < e) {                    // extend coverage rightwards
+                while (i < n && availableIntervals[i][0] <= reach)
+                    best = max(best, (long long)availableIntervals[i++][1]);
+                if (best <= reach) return -1;      // gap, can't extend
+                cnt++;
+                reach = best;
+            }
+        }
+        return cnt;
+    }
+};
