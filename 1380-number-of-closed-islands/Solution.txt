@@ -1,0 +1,36 @@
+class Solution {
+public:
+    int closedIsland(vector<vector<int>>& grid) {
+        int n = grid.size(), m = grid[0].size();
+        int ans = 0;
+        int dr[4] = {1, -1, 0, 0};
+        int dc[4] = {0, 0, 1, -1};
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 0) {
+                    bool isCorner = false;
+                    queue<pair<int, int>> q;
+                    q.push({i, j});
+                    while (!q.empty()) {
+                        auto [x, y] = q.front();
+                        q.pop();
+                        if (x == 0 || x == n - 1 || y == 0 || y == m - 1) {
+                            isCorner = true;
+                        }
+                        for (int k = 0; k < 4; k++) {
+                            int r = x + dr[k];
+                            int c = y + dc[k];
+                            if (r >= 0 && r < n && c >= 0 && c < m &&
+                                grid[r][c] == 0) {
+                                grid[r][c] = 1;
+                                q.push({r, c});
+                            }
+                        }
+                    }
+                    ans += isCorner == false ? 1 : 0;
+                }
+            }
+        }
+        return ans;
+    }
+};
