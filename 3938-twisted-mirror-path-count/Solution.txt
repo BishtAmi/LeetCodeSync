@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int MOD = 1e9 + 7;
+    int n, m;
+    // chk = 0 -> right
+    // chk = 1 -> down
+    int dp[501][501][2];
+    int solve(int row, int col, int chk, vector<vector<int>>& grid) {
+        if (row >= n || col >= m) {
+            return 0;
+        }
+        if (row == n - 1 && col == m - 1)
+            return 1;
+        if(dp[row][col][chk] != -1) return dp[row][col][chk];    
+        int right = 0, down = 0;
+        if (grid[row][col] == 1) {
+            if (chk == 0) {
+                right = solve(row + 1, col, 1, grid);
+            } else
+                down = solve(row, col + 1, 0, grid);
+        } else {
+            right = solve(row, col + 1, 0, grid);
+            down = solve(row + 1, col, 1, grid);
+        }
+        return dp[row][col][chk] = (right + down) % MOD;
+    }
+    int uniquePaths(vector<vector<int>>& grid) {
+        n = grid.size();
+        m = grid[0].size();
+        memset(dp,-1,sizeof(dp));
+        return solve(0, 0, 0, grid);
+    }
+};
+
+/*
+0 1 1
+1 1 0
+
+0 0 -> 0 1 -> 1 1 -> 0
+
+
+*/
