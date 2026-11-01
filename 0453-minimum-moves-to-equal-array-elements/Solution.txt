@@ -3,23 +3,18 @@ public:
     int minMoves(vector<int>& nums) {
         int n = nums.size();
         int mini = *min_element(nums.begin(),nums.end());
-        int ans = 0;
+        int sum = 0;
         for(auto x:nums)
         {
-            ans += x - mini;
+            sum += x;
         }
-        return ans;
+        return sum - mini * n;
     }
 };
 /*
 
- mini + ans = maxi + x = secondMaxi + y
+ S + k(n-1) = ( mini + k ) * n
+ kn - k = mini * n + kn - S
 
- mini + x + y = maxi + x
- y = maxi - mini
- x = maxi - secondmaxo
- mini + x + y = secondMaxi + y
- x + y = ans
-
-
+ k = S - mini * n 
 */
