@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int minMoves(vector<int>& nums) {
+        int n = nums.size();
+        int mini = *min_element(nums.begin(),nums.end());
+        int ans = 0;
+        for(auto x:nums)
+        {
+            ans += x - mini;
+        }
+        return ans;
+    }
+};
+/*
+
+ mini + ans = maxi + x = secondMaxi + y
+
+ mini + x + y = maxi + x
+ y = maxi - mini
+ x = maxi - secondmaxo
+ mini + x + y = secondMaxi + y
+ x + y = ans
+
+
+*/
