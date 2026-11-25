@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<long long> earliestActivationTimes(int n, vector<vector<int>>& edges,
+                                              vector<int>& requiredSignals) {
+        vector<vector<pair<int, int>>> graph(n);
+
+        for (auto edge : edges) {
+            int u = edge[0], v = edge[1], d = edge[2];
+            graph[u].push_back({v, d});
+        }
+    
+        priority_queue<pair<long long, int>, vector<pair<long long, int>>,
+                       greater<pair<long long, int>>>
+            q;
+        for (auto adj : graph[0]) {
+            q.push({adj.second, adj.first});
+        }
+
+        vector<long long> ans(n, -1);
+        ans[0] = 0;
+        while (!q.empty()) {
+            auto [c, u] = q.top();
+            q.pop();
+            if (ans[u] >= 0) {
+                continue;
+            }
+
+            if (--requiredSignals[u] == 0) {
+                ans[u] = c;
+                for (auto adj : graph[u]) {
+                    int v = adj.first;
+                    long long d = adj.second;
+                    if (ans[v] < 0) {
+                        q.push({c + d, v});
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+// 3 < -4 < -0->3
